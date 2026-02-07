@@ -48,7 +48,7 @@ export function Pricing() {
                             "Ahorro de tiempo y esfuerzo",
                             "Comunicación directa sin intermediarios"
                         ]}
-                        link="https://www.flow.cl/uri/jytp6PWsj"
+                        link="/solicitar?plan=basico"
                         color="electric-blue"
                     />
 
@@ -74,7 +74,7 @@ export function Pricing() {
                             "Atención rápida",
                             "Estrategia alineada a objetivos"
                         ]}
-                        link="https://www.flow.cl/uri/ytjrJ55FA"
+                        link="/solicitar?plan=pro"
                         color="neon-cyan"
                         isPopular
                     />
@@ -104,7 +104,7 @@ export function Pricing() {
                             "Atención inmediata",
                             "Decisiones basadas en datos reales"
                         ]}
-                        link="https://www.flow.cl/uri/Csh6CmG7v"
+                        link="/solicitar?plan=premium"
                         color="violet"
                     />
                 </div>
@@ -173,7 +173,7 @@ function PricingCard({ title, subtitle, price, icon, iconColor, features, benefi
             </div>
 
             <div className="mt-8 pt-6 border-t border-white/10">
-                <a href={link} target="_blank" rel="noopener noreferrer" className="block w-full">
+                <a href={link} className="block w-full">
                     <button className={`px-6 py-3 rounded-md font-heading font-bold transition-all relative overflow-hidden w-full justify-center group ${buttonClasses}`}>
                         Contratar ahora
                     </button>
