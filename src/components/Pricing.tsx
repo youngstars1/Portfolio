@@ -113,7 +113,26 @@ export function Pricing() {
     )
 }
 
-function PricingCard({ title, subtitle, price, icon, iconColor, features, benefits, link, color, isPopular }: any) {
+interface Feature {
+    icon: React.ReactNode
+    text: string
+    color: string
+}
+
+interface PricingCardProps {
+    title: string
+    subtitle: string
+    price: string
+    icon: React.ReactNode
+    iconColor: string
+    features: Feature[]
+    benefits: string[]
+    link: string
+    color: string
+    isPopular?: boolean
+}
+
+function PricingCard({ title, subtitle, price, icon, iconColor, features, benefits, link, isPopular }: PricingCardProps) {
     const borderColor = isPopular ? 'border-neon-cyan' : 'border-white/10 hover:border-white/30'
     const cardClasses = `glass-card p-6 rounded-xl text-white relative flex flex-col h-full transition-all duration-500 hover:-translate-y-4 hover:scale-105 perspective-1000 ${borderColor}`
     const popularClasses = isPopular ? 'shadow-[0_0_30px_rgba(0,243,255,0.15)] scale-100 md:scale-105 z-20 bg-deep-black/80 animate-[pulse-glow_3s_ease-in-out_infinite]' : ''
@@ -150,7 +169,7 @@ function PricingCard({ title, subtitle, price, icon, iconColor, features, benefi
                 <div>
                     <h4 className="text-xs font-bold text-neon-cyan uppercase tracking-widest mb-4 border-b border-white/10 pb-2">Incluye</h4>
                     <ul className="space-y-4">
-                        {features.map((feature: any, index: number) => (
+                        {features.map((feature: Feature, index: number) => (
                             <li key={index} className="flex items-start gap-3 text-gray-300 text-sm">
                                 <span className={`flex-shrink-0 mt-0.5 ${feature.color}`}>{feature.icon}</span>
                                 <span>{feature.text}</span>

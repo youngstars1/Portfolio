@@ -1,11 +1,10 @@
 'use client'
-import React, { useRef } from 'react'
+import React from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Facebook, Instagram, Mail, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 
 export function Hero() {
-    const ref = useRef(null)
     const { scrollY } = useScroll()
     const y = useTransform(scrollY, [0, 500], [0, 200])
     const opacity = useTransform(scrollY, [0, 300], [1, 0])

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useMemo, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { Check, X, Clock, ArrowLeft, Home, MessageCircle } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
@@ -11,33 +11,25 @@ type PaymentStatus = 'success' | 'pending' | 'rejected' | 'cancelled' | 'loading
 
 function PaymentResultContent() {
     const searchParams = useSearchParams()
-    const [status, setStatus] = useState<PaymentStatus>('loading')
-    const [orderNumber, setOrderNumber] = useState<string>('')
 
-    useEffect(() => {
-        // Flow redirige con parámetros después del pago
-        const token = searchParams.get('token')
+    // Usar useMemo para evitar llamar setState en useEffect
+    const { status, orderNumber } = useMemo(() => {
         const flowStatus = searchParams.get('status')
-        const order = searchParams.get('order')
+        const order = searchParams.get('order') || ''
 
-        if (order) {
-            setOrderNumber(order)
-        }
+        let computedStatus: PaymentStatus = 'success'
 
-        // Determinar estado basado en la respuesta de Flow
-        // En producción, deberías verificar el estado con el backend
         if (flowStatus === '2' || flowStatus === 'success') {
-            setStatus('success')
+            computedStatus = 'success'
         } else if (flowStatus === '1' || flowStatus === 'pending') {
-            setStatus('pending')
+            computedStatus = 'pending'
         } else if (flowStatus === '3' || flowStatus === 'rejected') {
-            setStatus('rejected')
+            computedStatus = 'rejected'
         } else if (flowStatus === '4' || flowStatus === 'cancelled') {
-            setStatus('cancelled')
-        } else {
-            // Por defecto mostrar éxito si vienen del flujo normal
-            setStatus('success')
+            computedStatus = 'cancelled'
         }
+
+        return { status: computedStatus, orderNumber: order }
     }, [searchParams])
 
     const statusConfig = {

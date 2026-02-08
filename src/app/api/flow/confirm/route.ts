@@ -59,10 +59,17 @@ export async function POST(request: NextRequest) {
         }
 
         // Parsear datos opcionales del cliente
-        let customerData: any = {}
+        interface CustomerData {
+            planId?: string
+            planName?: string
+            customerName?: string
+            customerPhone?: string
+            message?: string
+        }
+        let customerData: CustomerData = {}
         try {
             if (paymentData.optional) {
-                customerData = JSON.parse(paymentData.optional)
+                customerData = JSON.parse(paymentData.optional) as CustomerData
             }
         } catch {
             console.log('⚠️ Could not parse optional data')

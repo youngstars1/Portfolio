@@ -81,7 +81,7 @@ function SolicitarServicioContent() {
         mensaje: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [isSubmitted, setIsSubmitted] = useState(false)
+    const [paymentError, setPaymentError] = useState<string | null>(null)
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -106,8 +106,6 @@ function SolicitarServicioContent() {
     const prevStep = () => {
         if (currentStep > 1) setCurrentStep(currentStep - 1)
     }
-
-    const [paymentError, setPaymentError] = useState<string | null>(null)
 
     const handleSubmit = async () => {
         setIsSubmitting(true)
@@ -395,7 +393,7 @@ function SolicitarServicioContent() {
                         )}
 
                         {/* Step 3: Confirmation */}
-                        {currentStep === 3 && !isSubmitted && (
+                        {currentStep === 3 && (
                             <motion.div
                                 key="step3"
                                 initial={{ opacity: 0, x: 50 }}
@@ -485,85 +483,42 @@ function SolicitarServicioContent() {
                                 </div>
                             </motion.div>
                         )}
-
-                        {/* Success State */}
-                        {isSubmitted && (
-                            <motion.div
-                                key="success"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="max-w-xl mx-auto text-center"
-                            >
-                                <div className="glass-card p-12 rounded-2xl border border-neon-cyan/30">
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{ type: 'spring', delay: 0.2 }}
-                                        className="w-24 h-24 bg-neon-cyan rounded-full flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(0,243,255,0.5)]"
-                                    >
-                                        <Check size={48} className="text-deep-black" />
-                                    </motion.div>
-
-                                    <h2 className="text-3xl font-bold text-white mb-4">
-                                        ¡Solicitud Enviada!
-                                    </h2>
-                                    <p className="text-gray-400 mb-8">
-                                        Hemos recibido tu solicitud correctamente. Nos pondremos en contacto contigo a la brevedad para coordinar los detalles de tu proyecto.
-                                    </p>
-
-                                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                        <Link href="/">
-                                            <button className="px-8 py-3 rounded-xl border border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-all font-bold">
-                                                Volver al Inicio
-                                            </button>
-                                        </Link>
-                                        <a href="https://wa.me/56920444783" target="_blank" rel="noopener noreferrer">
-                                            <button className="px-8 py-3 rounded-xl bg-neon-cyan text-deep-black hover:bg-neon-cyan-hover transition-all font-bold shadow-[0_0_20px_rgba(0,243,255,0.4)]">
-                                                Escribir por WhatsApp
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
                     </AnimatePresence>
                 </div>
             </section>
 
             {/* Navigation Buttons */}
-            {!isSubmitted && (
-                <section className="py-8 relative z-10">
-                    <div className="container mx-auto px-4 max-w-5xl">
-                        <div className="flex justify-between items-center">
+            <section className="py-8 relative z-10">
+                <div className="container mx-auto px-4 max-w-5xl">
+                    <div className="flex justify-between items-center">
+                        <button
+                            onClick={prevStep}
+                            disabled={currentStep === 1}
+                            className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all font-medium ${currentStep === 1
+                                ? 'border-white/10 text-gray-600 cursor-not-allowed'
+                                : 'border-white/20 text-white hover:border-neon-cyan hover:text-neon-cyan'
+                                }`}
+                        >
+                            <ChevronLeft size={20} />
+                            Anterior
+                        </button>
+
+                        {currentStep < 3 && (
                             <button
-                                onClick={prevStep}
-                                disabled={currentStep === 1}
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl border transition-all font-medium ${currentStep === 1
-                                    ? 'border-white/10 text-gray-600 cursor-not-allowed'
-                                    : 'border-white/20 text-white hover:border-neon-cyan hover:text-neon-cyan'
+                                onClick={nextStep}
+                                disabled={!canProceed()}
+                                className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all ${canProceed()
+                                    ? 'bg-neon-cyan text-deep-black hover:bg-neon-cyan-hover shadow-[0_0_20px_rgba(0,243,255,0.4)]'
+                                    : 'bg-white/10 text-gray-500 cursor-not-allowed'
                                     }`}
                             >
-                                <ChevronLeft size={20} />
-                                Anterior
+                                Siguiente
+                                <ChevronRight size={20} />
                             </button>
-
-                            {currentStep < 3 && (
-                                <button
-                                    onClick={nextStep}
-                                    disabled={!canProceed()}
-                                    className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all ${canProceed()
-                                        ? 'bg-neon-cyan text-deep-black hover:bg-neon-cyan-hover shadow-[0_0_20px_rgba(0,243,255,0.4)]'
-                                        : 'bg-white/10 text-gray-500 cursor-not-allowed'
-                                        }`}
-                                >
-                                    Siguiente
-                                    <ChevronRight size={20} />
-                                </button>
-                            )}
-                        </div>
+                        )}
                     </div>
-                </section>
-            )}
+                </div>
+            </section>
 
             {/* Footer */}
             <footer className="py-8 text-center text-gray-600 text-sm border-t border-white/5 relative z-10 glass">

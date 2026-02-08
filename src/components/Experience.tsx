@@ -3,8 +3,15 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Palette, Settings, PenTool, Image as ImageIcon, ShoppingBag, Megaphone, LifeBuoy, Monitor } from 'lucide-react'
 
+interface ExperienceItemProps {
+    title: string
+    description: string
+    icon: React.ReactNode
+    side: 'left' | 'right'
+}
+
 export function Experience() {
-    const experiences = [
+    const experiences: ExperienceItemProps[] = [
         { title: "Diseño Web", description: "Landing pages profesionales y optimizadas.", icon: <Palette className="w-5 h-5" />, side: "right" },
         { title: "Mantenimiento Web", description: "Optimización, corrección de bugs y SEO técnico.", icon: <Settings className="w-5 h-5" />, side: "left" },
         { title: "Diseño de Logos", description: "Identidad visual y branding profesional.", icon: <PenTool className="w-5 h-5" />, side: "right" },
@@ -53,7 +60,8 @@ export function Experience() {
     )
 }
 
-function ExperienceItem({ title, description, icon, side }: any) {
+
+function ExperienceItem({ title, description, icon, side }: ExperienceItemProps) {
     const isRight = side === "right"
     const containerClass = `relative pl-8 md:pl-0 flex flex-col md:flex-row items-center gap-6 ${isRight ? "md:flex-row-reverse md:text-right" : "md:text-left"}`
     const contentClass = `w-full md:w-[calc(50%-2rem)] ${isRight ? "md:pr-8" : "md:pl-8"}`
