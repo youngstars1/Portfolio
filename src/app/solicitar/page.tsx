@@ -126,7 +126,20 @@ function SolicitarServicioContent() {
                 })
             })
 
-            const data = await response.json()
+            // Check content type to avoid JSON parse errors on HTML error pages
+            const contentType = response.headers.get('content-type')
+            if (!contentType || !contentType.includes('application/json')) {
+                console.error('Server returned non-JSON response:', response.status, contentType)
+                throw new Error('El servidor no respondió correctamente. Verifica que la configuración del sitio sea correcta.')
+            }
+
+            let data
+            try {
+                data = await response.json()
+            } catch {
+                console.error('Failed to parse response as JSON, status:', response.status)
+                throw new Error('Error de comunicación con el servidor. Intenta nuevamente.')
+            }
 
             if (!response.ok) {
                 throw new Error(data.error || 'Error al procesar el pago')
